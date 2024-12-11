@@ -1,1 +1,1 @@
-export { default as Model } from './Model.js';
+export { default as Day } from './Day.js';

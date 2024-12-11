@@ -7,7 +7,7 @@ describe('OutputView 테스트', () => {
   });
 
   test('', () => {
-    OutputView.printShift(1);
+    OutputView.printShift(1, '화');
     expect(true).toBe(true);
   });
 });

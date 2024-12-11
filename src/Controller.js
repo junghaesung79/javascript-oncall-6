@@ -27,7 +27,7 @@ export default class Controller {
       async () => await this.inputView.getWeekendShift(),
     );
 
-    OutputView.printShift(startMonth);
+    OutputView.printShift(startMonth, startDay);
   }
 
   async #retryOnError(inputFunction) {
