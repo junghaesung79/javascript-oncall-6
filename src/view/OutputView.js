@@ -1,7 +1,8 @@
 import { Printer } from '../io/index.js';
-import { MONTH } from '../constants/index.js';
+import { CONFIG, MONTH } from '../constants/index.js';
 import { formatShift } from '../utils/format.js';
 import { Day } from '../models/index.js';
+import { getHoliday } from '../utils/holiday.js';
 
 export default class OutputView {
   static error(message) {
@@ -13,11 +14,15 @@ export default class OutputView {
     const dayGenerator = new Day(day);
 
     const shiftLines = [...Array(countOfMonth)].map((_, index) => {
+      const date = index + 1;
+      const day = dayGenerator.generateDayOfDate(date);
+      const holiday = getHoliday(month, date, day);
+
       const element = {
-        month: month,
-        date: index + 1,
-        day: dayGenerator.generateDayOfDate(index + 1),
-        holiday: '(휴일)',
+        month,
+        date,
+        day,
+        holiday,
         nickname: '해성',
       };
 
