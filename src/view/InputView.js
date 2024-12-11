@@ -22,8 +22,21 @@ export default class InputView {
     console.log({ startMonth, startDay });
     return { startMonth, startDay };
   }
-  //   const [month, dayOfWeek] = Reader.readCSVString(PROMPTS.weekdayShift);
-  //   const [month, dayOfWeek] = Reader.readCSVString(PROMPTS.weekendShift);
+
+  static async getWeekdayShift() {
+    const people = await Reader.readCSVString(PROMPTS.weekdayShift);
+
+    if (
+      this.#isInvalidPeopleCount(people) ||
+      this.#isDuplicatedNickname(people) ||
+      this.#isInvalidNameLength(people)
+    ) {
+      throwError(ERRORS.invalidInput);
+    }
+
+    return people;
+  }
+  // const [month, dayOfWeek] = await Reader.readCSVString(PROMPTS.weekendShift);
 
   static #isInvalidStartDatas(data) {
     return data.length > CONFIG.startDataCount;
@@ -39,5 +52,17 @@ export default class InputView {
 
   static #isInvalidDay(day) {
     return !CONFIG.dayOfWeek.includes(day);
+  }
+
+  static #isInvalidPeopleCount(people) {
+    return people.length > CONFIG.maxShiftPeople || people.length < CONFIG.minShiftPeople;
+  }
+
+  static #isDuplicatedNickname(people) {
+    return new Set(people).size !== people.length;
+  }
+
+  static #isInvalidNameLength(people) {
+    return people.some((name) => name.length > CONFIG.maxNameLength);
   }
 }

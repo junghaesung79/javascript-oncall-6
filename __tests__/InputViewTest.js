@@ -34,4 +34,31 @@ describe('InputView 테스트', () => {
       });
     });
   });
+
+  describe.skip('getWeekdayShift 테스트', () => {
+    const testCases = [
+      ['정상 입력', ['가', '나', '다', '라', '마'], ['가', '나', '다', '라', '마'], false],
+      // [
+      //   '많은 사람',
+      //   ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'],
+      //   null,
+      //   true,
+      // ],
+      ['적은 사람', ['가', '나'], null, true],
+      ['중복 이름', ['가', '나', '다', '라', '라'], null, true],
+      ['긴 이름', ['가가가가가가', '나', '다', '라', '마'], null, true],
+    ];
+
+    testCases.forEach(([description, input, expected, isError]) => {
+      test(description, async () => {
+        Reader.readCSVString.mockResolvedValue(input);
+
+        if (isError) {
+          await expect(InputView.getWeekdayShift()).rejects.toThrow();
+          return;
+        }
+        await expect(InputView.getWeekdayShift()).resolves.toEqual(expected);
+      });
+    });
+  });
 });
