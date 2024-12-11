@@ -9,7 +9,10 @@ jest.mock('../src/io/index.js', () => ({
 }));
 
 describe('InputView 테스트', () => {
+  let inputView;
+
   beforeEach(() => {
+    inputView = new InputView();
     jest.clearAllMocks();
   });
 
@@ -27,10 +30,10 @@ describe('InputView 테스트', () => {
         Reader.readCSVString.mockResolvedValue(input);
 
         if (isError) {
-          await expect(InputView.getStartMonthAndDay()).rejects.toThrow();
+          await expect(inputView.getStartMonthAndDay()).rejects.toThrow();
           return;
         }
-        await expect(InputView.getStartMonthAndDay()).resolves.toEqual(expected);
+        await expect(inputView.getStartMonthAndDay()).resolves.toEqual(expected);
       });
     });
   });
@@ -54,10 +57,10 @@ describe('InputView 테스트', () => {
         Reader.readCSVString.mockResolvedValue(input);
 
         if (isError) {
-          await expect(InputView.getWeekdayShift()).rejects.toThrow();
+          await expect(inputView.getWeekdayShift()).rejects.toThrow();
           return;
         }
-        await expect(InputView.getWeekdayShift()).resolves.toEqual(expected);
+        await expect(inputView.getWeekdayShift()).resolves.toEqual(expected);
       });
     });
   });

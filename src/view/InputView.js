@@ -3,7 +3,7 @@ import { throwError } from '../utils/errorHandler.js';
 import { CONFIG, ERRORS, PROMPTS } from '../constants/index.js';
 
 export default class InputView {
-  static async getStartMonthAndDay() {
+  async getStartMonthAndDay() {
     const startDatas = await Reader.readCSVString(PROMPTS.startMonthAndDay);
     const startMonth = Number(startDatas[0]);
     const startDay = startDatas[1];
@@ -23,7 +23,7 @@ export default class InputView {
     return { startMonth, startDay };
   }
 
-  static async getWeekdayShift() {
+  async getWeekdayShift() {
     const people = await Reader.readCSVString(PROMPTS.weekdayShift);
 
     if (
@@ -36,33 +36,46 @@ export default class InputView {
 
     return people;
   }
-  // const [month, dayOfWeek] = await Reader.readCSVString(PROMPTS.weekendShift);
 
-  static #isInvalidStartDatas(data) {
+  async getWeekdayShift() {
+    const people = await Reader.readCSVString(PROMPTS.weekdayShift);
+
+    if (
+      this.#isInvalidPeopleCount(people) ||
+      this.#isDuplicatedNickname(people) ||
+      this.#isInvalidNameLength(people)
+    ) {
+      throwError(ERRORS.invalidInput);
+    }
+
+    return people;
+  }
+
+  #isInvalidStartDatas(data) {
     return data.length > CONFIG.startDataCount;
   }
 
-  static #isInvalidInteger(number) {
+  #isInvalidInteger(number) {
     return isNaN(number) || !Number.isInteger(number);
   }
 
-  static #isInvalidMonth(month) {
+  #isInvalidMonth(month) {
     return month > CONFIG.lastMonth || month < CONFIG.firstMonth;
   }
 
-  static #isInvalidDay(day) {
+  #isInvalidDay(day) {
     return !CONFIG.dayOfWeek.includes(day);
   }
 
-  static #isInvalidPeopleCount(people) {
+  #isInvalidPeopleCount(people) {
     return people.length > CONFIG.maxShiftPeople || people.length < CONFIG.minShiftPeople;
   }
 
-  static #isDuplicatedNickname(people) {
+  #isDuplicatedNickname(people) {
     return new Set(people).size !== people.length;
   }
 
-  static #isInvalidNameLength(people) {
+  #isInvalidNameLength(people) {
     return people.some((name) => name.length > CONFIG.maxNameLength);
   }
 }

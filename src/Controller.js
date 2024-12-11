@@ -7,6 +7,8 @@ import { EVENT_TYPES } from './types/index.js';
 
 export default class Controller {
   constructor() {
+    this.inputView = new InputView();
+
     EventEmitter.on(EVENT_TYPES.submit, (data) => {
       OutputView.printSubmit(data);
     });
@@ -16,7 +18,13 @@ export default class Controller {
 
   async run() {
     const { startMonth, startDay } = await this.#retryOnError(
-      async () => await InputView.getStartMonthAndDay(),
+      async () => await this.inputView.getStartMonthAndDay(),
+    );
+    const weekdayShift = await this.#retryOnError(
+      async () => await this.inputView.getWeekdayShift(),
+    );
+    const weekendShift = await this.#retryOnError(
+      async () => await this.inputView.getWeekendShift(),
     );
   }
 
