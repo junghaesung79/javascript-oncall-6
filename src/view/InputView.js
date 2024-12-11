@@ -23,7 +23,6 @@ export default class InputView {
       throwError(ERRORS.invalidInput);
     }
 
-    console.log({ startMonth, startDay });
     return { startMonth, startDay };
   }
 

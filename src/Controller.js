@@ -41,7 +41,7 @@ export default class Controller {
       try {
         return await inputFunction();
       } catch (error) {
-        OutputView.printError(error.message);
+        OutputView.error(error.message);
         attempts += 1;
 
         if (attempts === CONFIG.maxRetryCount) {

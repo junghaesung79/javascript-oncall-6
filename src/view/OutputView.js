@@ -1,8 +1,8 @@
 import { Printer } from '../io/index.js';
 import { CONFIG, MONTH } from '../constants/index.js';
 import { formatShift } from '../utils/format.js';
-import { Day } from '../models/index.js';
-import { getHoliday } from '../utils/holiday.js';
+import { Day, Shift } from '../models/index.js';
+import { getHoliday, getIsHoliday } from '../utils/holiday.js';
 
 export default class OutputView {
   static error(message) {
@@ -17,13 +17,15 @@ export default class OutputView {
       const date = index + 1;
       const day = dayGenerator.generateDayOfDate(date);
       const holiday = getHoliday(month, date, day);
+      const isHoliday = getIsHoliday(month, date, day);
+      const nickname = Shift.getWorker(isHoliday, weekdayShift, weekendShift);
 
       const element = {
         month,
         date,
         day,
         holiday,
-        nickname: '해성',
+        nickname,
       };
 
       return formatShift(element);
