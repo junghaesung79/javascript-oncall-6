@@ -4,6 +4,7 @@ import { throwError } from './utils/errorHandler.js';
 import { InputView, OutputView } from './view/index.js';
 import { EventEmitter } from './core/index.js';
 import { EVENT_TYPES } from './types/index.js';
+import { Shift } from './models/index.js';
 
 export default class Controller {
   constructor() {
@@ -20,14 +21,17 @@ export default class Controller {
     const { startMonth, startDay } = await this.#retryOnError(
       async () => await this.inputView.getStartMonthAndDay(),
     );
-    const weekdayShift = await this.#retryOnError(
+    const weekdayShiftNames = await this.#retryOnError(
       async () => await this.inputView.getWeekdayShift(),
     );
-    const weekendShift = await this.#retryOnError(
+    const weekendShiftNames = await this.#retryOnError(
       async () => await this.inputView.getWeekendShift(),
     );
 
-    OutputView.printShift(startMonth, startDay);
+    const weekdayShift = new Shift(weekdayShiftNames);
+    const weekendShift = new Shift(weekendShiftNames);
+
+    OutputView.printShift(startMonth, startDay, weekdayShift, weekendShift);
   }
 
   async #retryOnError(inputFunction) {

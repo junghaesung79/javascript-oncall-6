@@ -9,7 +9,7 @@ export default class OutputView {
     Printer.print(message);
   }
 
-  static printShift(month, day) {
+  static printShift(month, day, weekdayShift, weekendShift) {
     const countOfMonth = MONTH.countOfMonth[month];
     const dayGenerator = new Day(day);
 
