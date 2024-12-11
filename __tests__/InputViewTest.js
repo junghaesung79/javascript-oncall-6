@@ -1,4 +1,3 @@
-import { startMonth } from '../src/constants/config.js';
 import { Reader } from '../src/io/index.js';
 import { InputView } from '../src/view/index.js';
 
