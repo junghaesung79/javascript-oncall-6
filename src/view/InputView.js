@@ -4,8 +4,9 @@ import { CONFIG, ERRORS, PROMPTS } from '../constants/index.js';
 
 export default class InputView {
   static async getStartMonthAndDay() {
-    const startDatas = Reader.readCSVString(PROMPTS.startMonthAndDay);
-    const [startMonth, startDay] = startDatas;
+    const startDatas = await Reader.readCSVString(PROMPTS.startMonthAndDay);
+    const startMonth = Number(startDatas[0]);
+    const startDay = startDatas[1];
 
     if (
       this.#isInvalidStartDatas(startDatas) ||
@@ -18,6 +19,7 @@ export default class InputView {
       throwError(ERRORS.invalidInput);
     }
 
+    console.log({ startMonth, startDay });
     return { startMonth, startDay };
   }
   //   const [month, dayOfWeek] = Reader.readCSVString(PROMPTS.weekdayShift);
@@ -36,6 +38,6 @@ export default class InputView {
   }
 
   static #isInvalidDay(day) {
-    return CONFIG.dayOfWeek.includes(day);
+    return !CONFIG.dayOfWeek.includes(day);
   }
 }

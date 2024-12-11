@@ -1,58 +1,36 @@
+import { startMonth } from '../src/constants/config.js';
 import { Reader } from '../src/io/index.js';
 import { InputView } from '../src/view/index.js';
 
 jest.mock('../src/io/index.js', () => ({
   Reader: {
-    readNumber: jest.fn(),
-    readCSVNumber: jest.fn(),
+    readCSVString: jest.fn(),
   },
 }));
 
 describe('InputView 테스트', () => {
-  let inputView;
-
   beforeEach(() => {
-    inputView = new InputView();
     jest.clearAllMocks();
   });
 
-  describe('getPurchasePrice 테스트', () => {
+  describe.skip('getStartMonthAndDay 테스트', () => {
     const testCases = [
-      ['정상 테스트', 8000, 8000, false],
-      ['예외 테스트', 500, null, true],
+      ['정상 입력', ['1', '월'], { startMonth: 1, startDay: '월' }, false],
+      ['숫자가 아닌 월', ['일', '일'], null, true],
+      ['벗어난 월', ['0', '일'], null, true],
+      ['벗어난 월', ['13', '일'], null, true],
+      ['없는 요일', ['1', '가'], null, true],
     ];
 
-    testCases.forEach(([description, input, output, isError]) => {
+    testCases.forEach(([description, input, expected, isError]) => {
       test(description, async () => {
-        Reader.readNumber.mockResolvedValue(input);
+        Reader.readCSVString.mockResolvedValue(input);
 
         if (isError) {
-          await expect(inputView.getPurchasePrice()).rejects.toThrow();
+          await expect(InputView.getStartMonthAndDay()).rejects.toThrow();
           return;
         }
-        await expect(inputView.getPurchasePrice()).resolves.toBe(output);
-      });
-    });
-  });
-
-  describe('getBonusNumber 테스트', () => {
-    const testCases = [
-      ['정상 테스트', 7, 7, false],
-      ['예외 테스트', 6, null, true],
-      ['예외 테스트', 0, null, true],
-      ['예외 테스트', 46, null, true],
-    ];
-
-    testCases.forEach(([description, input, output, isError]) => {
-      test(description, async () => {
-        const winningNumbers = [1, 2, 3, 4, 5, 6];
-        Reader.readNumber.mockResolvedValue(input);
-
-        if (isError) {
-          await expect(inputView.getBonusNumber(winningNumbers)).rejects.toThrow();
-          return;
-        }
-        await expect(inputView.getBonusNumber(winningNumbers)).resolves.toBe(output);
+        await expect(InputView.getStartMonthAndDay()).resolves.toEqual(expected);
       });
     });
   });

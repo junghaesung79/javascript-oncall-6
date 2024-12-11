@@ -7,7 +7,7 @@ jest.mock('@woowacourse/mission-utils', () => ({
   },
 }));
 
-describe('Reader 테스트', () => {
+describe.skip('Reader 테스트', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

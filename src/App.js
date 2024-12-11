@@ -1,4 +1,4 @@
-import { Controller } from './index.js';
+import Controller from './Controller.js';
 
 class App {
   async run() {
