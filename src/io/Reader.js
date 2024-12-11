@@ -35,18 +35,6 @@ export default class Reader {
     });
   }
 
-  static async readConfirmation(query) {
-    const normalizedInput = await this.#readAndNormalize(query);
-    const answer = normalizedInput.toLowerCase();
-
-    const isValidAnswer = CONFIG.confirmAnswers.includes(answer);
-    if (!isValidAnswer) {
-      throwError(ERRORS.invalidConfirmation);
-    }
-
-    return answer;
-  }
-
   static async #readAndNormalize(query) {
     const line = await Console.readLineAsync(query);
     const normalizedLine = line.trim();
@@ -65,7 +53,7 @@ export default class Reader {
   static #validateNumber(value) {
     const number = Number(value);
     if (isNaN(number) || !Number.isInteger(number)) {
-      throwError(ERRORS.invalidNumber, { value });
+      throwError(ERRORS.invalidNumber);
     }
   }
 

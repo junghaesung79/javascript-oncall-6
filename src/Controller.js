@@ -15,7 +15,9 @@ export default class Controller {
   }
 
   async run() {
-    const input = await this.#retryOnError(async () => await InputView.getInput());
+    const { startMonth, startDay } = await this.#retryOnError(
+      async () => await InputView.getStartMonthAndDay(),
+    );
   }
 
   async #retryOnError(inputFunction) {
