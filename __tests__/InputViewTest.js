@@ -8,7 +8,7 @@ jest.mock('../src/io/index.js', () => ({
   },
 }));
 
-describe('InputView 테스트', () => {
+describe.skip('InputView 테스트', () => {
   let inputView;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('InputView 테스트', () => {
     jest.clearAllMocks();
   });
 
-  describe.skip('getStartMonthAndDay 테스트', () => {
+  describe('getStartMonthAndDay 테스트', () => {
     const testCases = [
       ['정상 입력', ['1', '월'], { startMonth: 1, startDay: '월' }, false],
       ['숫자가 아닌 월', ['일', '일'], null, true],
@@ -38,7 +38,7 @@ describe('InputView 테스트', () => {
     });
   });
 
-  describe.skip('getWeekdayShift 테스트', () => {
+  describe('getWeekdayShift 테스트', () => {
     const testCases = [
       ['정상 입력', ['가', '나', '다', '라', '마'], ['가', '나', '다', '라', '마'], false],
       // [

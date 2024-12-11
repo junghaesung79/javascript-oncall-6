@@ -1,7 +1,8 @@
 import { Reader } from '../io/index.js';
 import { throwError } from '../utils/errorHandler.js';
-import { CONFIG, ERRORS, PROMPTS } from '../constants/index.js';
+import { CONFIG, ERRORS, MONTH, PROMPTS } from '../constants/index.js';
 import { ascendingString } from '../utils/array.js';
+import { countOfMonth } from '../constants/month.js';
 
 export default class InputView {
   #weekDayShift;
@@ -60,7 +61,7 @@ export default class InputView {
   }
 
   #isInvalidMonth(month) {
-    return month > CONFIG.lastMonth || month < CONFIG.firstMonth;
+    return month > MONTH.lastMonth || month < MONTH.firstMonth;
   }
 
   #isInvalidDay(day) {
