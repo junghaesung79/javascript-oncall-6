@@ -64,4 +64,27 @@ describe('InputView 테스트', () => {
       });
     });
   });
+
+  describe('getWeekendShift 테스트', () => {
+    const weedayShift = ['가', '나', '다', '라', '마'];
+    const testCases = [
+      ['정상 입력', ['가', '나', '다', '라', '마'], ['가', '나', '다', '라', '마'], false],
+      ['평일과 다른 입력', ['구', '나', '다', '라', '마'], null, true],
+    ];
+
+    testCases.forEach(([description, input, expected, isError]) => {
+      test(description, async () => {
+        Reader.readCSVString.mockResolvedValue(weedayShift);
+        await inputView.getWeekdayShift();
+
+        Reader.readCSVString.mockResolvedValue(input);
+
+        if (isError) {
+          await expect(inputView.getWeekendShift()).rejects.toThrow();
+          return;
+        }
+        await expect(inputView.getWeekendShift()).resolves.toEqual(expected);
+      });
+    });
+  });
 });

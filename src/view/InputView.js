@@ -1,8 +1,11 @@
 import { Reader } from '../io/index.js';
 import { throwError } from '../utils/errorHandler.js';
 import { CONFIG, ERRORS, PROMPTS } from '../constants/index.js';
+import { ascendingString } from '../utils/array.js';
 
 export default class InputView {
+  #weekDayShift;
+
   async getStartMonthAndDay() {
     const startDatas = await Reader.readCSVString(PROMPTS.startMonthAndDay);
     const startMonth = Number(startDatas[0]);
@@ -34,17 +37,14 @@ export default class InputView {
       throwError(ERRORS.invalidInput);
     }
 
+    this.#weekDayShift = people;
     return people;
   }
 
-  async getWeekdayShift() {
-    const people = await Reader.readCSVString(PROMPTS.weekdayShift);
+  async getWeekendShift() {
+    const people = await Reader.readCSVString(PROMPTS.weekendShift);
 
-    if (
-      this.#isInvalidPeopleCount(people) ||
-      this.#isDuplicatedNickname(people) ||
-      this.#isInvalidNameLength(people)
-    ) {
+    if (this.#isEqualToWeekdayShift(people)) {
       throwError(ERRORS.invalidInput);
     }
 
@@ -77,5 +77,11 @@ export default class InputView {
 
   #isInvalidNameLength(people) {
     return people.some((name) => name.length > CONFIG.maxNameLength);
+  }
+
+  #isEqualToWeekdayShift(people) {
+    const ascendingPeople = ascendingString(people);
+    const ascendingweekDayShift = ascendingString(this.#weekDayShift);
+    return ascendingPeople.toString() !== ascendingweekDayShift.toString();
   }
 }
